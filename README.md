@@ -2,6 +2,14 @@
 
 A machine-learning web application that predicts customer churn probability using Logistic Regression on the IBM Telco Customer Churn dataset.
 
+## Premium User Interface
+
+### Main Dashboard Home
+![Dashboard Homepage](static/screenshots/homepage.png)
+
+### Prediction & Churn Risk Analysis
+![Prediction Results](static/screenshots/prediction.png)
+
 ---
 
 ## Project Overview

@@ -374,7 +374,7 @@ async function runPrediction() {
 
     if (!res.ok) {
       const msg = data.details
-        ? data.details.join("\n")
+        ? (Array.isArray(data.details) ? data.details.join("\n") : data.details)
         : (data.error || "An unknown error occurred.");
       showError(msg);
       return;
@@ -508,9 +508,9 @@ function showProfileIndicators(payload) {
   // Monthly charges
   const mc = payload["Monthly Charges"];
   if (mc !== undefined) {
-    if (mc >= 80)      tags.push({ icon: "💰", text: `High monthly charges ($${mc})` });
-    else if (mc <= 30) tags.push({ icon: "💲", text: `Low monthly charges ($${mc})` });
-    else               tags.push({ icon: "💲", text: `Monthly charges: $${mc}` });
+    if (mc >= 80)      tags.push({ icon: "💰", text: `High monthly charges (Rs. ${mc})` });
+    else if (mc <= 30) tags.push({ icon: "💲", text: `Low monthly charges (Rs. ${mc})` });
+    else               tags.push({ icon: "💲", text: `Monthly charges: Rs. ${mc}` });
   }
 
   // Partner / Dependents

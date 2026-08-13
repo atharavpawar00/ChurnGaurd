@@ -6,6 +6,7 @@ Run: python app.py
 import os
 import json
 import joblib
+import traceback
 import numpy as np
 import pandas as pd
 from flask import Flask, request, jsonify, render_template
@@ -167,7 +168,13 @@ def predict():
 
     except Exception as e:
         app.logger.error("Prediction error: %s", str(e))
-        return jsonify({"error": "Prediction failed. Please check your inputs."}), 500
+        error_msg = str(e)
+        tb_str = traceback.format_exc()
+        return jsonify({
+            "error": "Prediction failed. Please check your inputs.",
+            "details": error_msg,
+            "traceback": tb_str
+        }), 500
 
 
 # ── Run ───────────────────────────────────────────────────────────────────────
