@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChurnGuard — Customer Churn Prediction</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════ HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="17" stroke="#6366f1" stroke-width="2"/>
+          <path d="M10 24 Q14 10 18 18 Q22 26 26 12" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <circle cx="26" cy="12" r="3" fill="#818cf8"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="brand-name">CHURNGUARD</h1>
+        <p class="brand-sub">Customer Churn Prediction &amp; Risk Analysis</p>
+      </div>
+    </div>
+    <p class="header-tagline">Identify customers at risk before they leave.</p>
+  </div>
+</header>
+
+<main class="page-main">
+
+  <!-- ════════════════════════════════════ CUSTOMER PROFILE FORM -->
+  <section class="card" id="section-form">
+    <h2 class="section-title">Customer Profile</h2>
+    <p class="section-desc">Enter customer details to assess churn risk. Default values represent a typical at-risk customer profile.</p>
+
+    <form id="customerForm" novalidate>
+
+      <!-- Group 1: Customer Info -->
+      <fieldset class="form-group">
+        <legend class="group-label">Customer Information</legend>
+        <div class="form-grid">
+
+          <div class="form-field">
+            <label for="seniorCitizen">Senior Citizen</label>
+            <select id="seniorCitizen" name="Senior Citizen">
+              <option value="No" selected>No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="partner">Partner</label>
+            <select id="partner" name="Partner">
+              <option value="No" selected>No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="dependents">Dependents</label>
+            <select id="dependents" name="Dependents">
+              <option value="No" selected>No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="tenure">Tenure (Months)</label>
+            <input type="number" id="tenure" name="Tenure Months" min="0" max="120" value="6" />
+          </div>
+
+        </div>
+      </fieldset>
+
+      <!-- Group 2: Services -->
+      <fieldset class="form-group">
+        <legend class="group-label">Services</legend>
+        <div class="form-grid">
+
+          <div class="form-field">
+            <label for="phoneService">Phone Service</label>
+            <select id="phoneService" name="Phone Service">
+              <option value="Yes" selected>Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="multipleLines">Multiple Lines</label>
+            <select id="multipleLines" name="Multiple Lines">
+              <option value="No" selected>No</option>
+              <option value="Yes">Yes</option>
+              <option value="No phone service">No phone service</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="internetService">Internet Service</label>
+            <select id="internetService" name="Internet Service">
+              <option value="Fiber optic" selected>Fiber optic</option>
+              <option value="DSL">DSL</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="onlineSecurity">Online Security</label>
+            <select id="onlineSecurity" name="Online Security">
+              <option value="No" selected>No</option>
+              <option value="Yes">Yes</option>
+              <option value="No internet service">No internet service</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="onlineBackup">Online Backup</label>
+            <select id="onlineBackup" name="Online Backup">
+              <option value="No" selected>No</option>
+              <option value="Yes">Yes</option>
+              <option value="No internet service">No internet service</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="deviceProtection">Device Protection</label>
+            <select id="deviceProtection" name="Device Protection">
+              <option value="No" selected>No</option>
+              <option value="Yes">Yes</option>
+              <option value="No internet service">No internet service</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="techSupport">Tech Support</label>
+            <select id="techSupport" name="Tech Support">
+              <option value="No" selected>No</option>
+              <option value="Yes">Yes</option>
+              <option value="No internet service">No internet service</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="streamingTV">Streaming TV</label>
+            <select id="streamingTV" name="Streaming TV">
+              <option value="No" selected>No</option>
+              <option value="Yes">Yes</option>
+              <option value="No internet service">No internet service</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="streamingMovies">Streaming Movies</label>
+            <select id="streamingMovies" name="Streaming Movies">
+              <option value="No" selected>No</option>
+              <option value="Yes">Yes</option>
+              <option value="No internet service">No internet service</option>
+            </select>
+          </div>
+
+        </div>
+      </fieldset>
+
+      <!-- Group 3: Billing -->
+      <fieldset class="form-group">
+        <legend class="group-label">Billing &amp; Contract</legend>
+        <div class="form-grid">
+
+          <div class="form-field">
+            <label for="contract">Contract</label>
+            <select id="contract" name="Contract">
+              <option value="Month-to-month" selected>Month-to-month</option>
+              <option value="One year">One year</option>
+              <option value="Two year">Two year</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="paperlessBilling">Paperless Billing</label>
+            <select id="paperlessBilling" name="Paperless Billing">
+              <option value="Yes" selected>Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="paymentMethod">Payment Method</label>
+            <select id="paymentMethod" name="Payment Method">
+              <option value="Electronic check" selected>Electronic check</option>
+              <option value="Mailed check">Mailed check</option>
+              <option value="Bank transfer (automatic)">Bank transfer (automatic)</option>
+              <option value="Credit card (automatic)">Credit card (automatic)</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="monthlyCharges">Monthly Charges ($)</label>
+            <input type="number" id="monthlyCharges" name="Monthly Charges" min="0" step="0.01" value="79.85" />
+          </div>
+
+          <div class="form-field">
+            <label for="totalCharges">Total Charges ($)</label>
+            <input type="number" id="totalCharges" name="Total Charges" min="0" step="0.01" value="479.10" />
+          </div>
+
+        </div>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-analyze" id="analyzeBtn">
+          <span class="btn-text">Analyze Customer</span>
+          <span class="btn-loader" id="btnLoader" style="display:none;">
+            <span class="spinner"></span> Analyzing…
+          </span>
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+  <!-- ════════════════════════════════════ RESULT SECTION -->
+  <section class="card result-card" id="resultSection" style="display:none;">
+    <h2 class="section-title">Customer Risk Assessment</h2>
+
+    <div class="result-layout">
+
+      <!-- Left: Risk badge + probability -->
+      <div class="result-main">
+        <div class="risk-badge" id="riskBadge">
+          <span id="riskLevel">—</span>
+        </div>
+        <div class="probability-display">
+          <span class="prob-value" id="probValue">—</span>
+          <span class="prob-label">Churn Probability</span>
+        </div>
+        <div class="prediction-text" id="predictionText">—</div>
+      </div>
+
+      <!-- Right: Risk meter -->
+      <div class="result-meter">
+        <div class="meter-track">
+          <div class="meter-zones">
+            <span class="zone-label low">LOW<br/><small>0–40%</small></span>
+            <span class="zone-label med">MEDIUM<br/><small>40–70%</small></span>
+            <span class="zone-label high">HIGH<br/><small>70–100%</small></span>
+          </div>
+          <div class="meter-bar">
+            <div class="meter-fill" id="meterFill" style="width:0%"></div>
+            <div class="meter-needle" id="meterNeedle" style="left:0%"></div>
+          </div>
+          <div class="meter-ticks">
+            <span>0%</span>
+            <span>25%</span>
+            <span>50%</span>
+            <span>75%</span>
+            <span>100%</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Error display -->
+    <div class="error-box" id="errorBox" style="display:none;"></div>
+  </section>
+
+  <!-- ════════════════════════════════════ PROFILE INDICATORS -->
+  <section class="card" id="profileSection" style="display:none;">
+    <h2 class="section-title">Risk Profile</h2>
+    <p class="section-desc">Notable characteristics of this customer's profile.</p>
+    <ul class="profile-tags" id="profileTags"></ul>
+    <p class="profile-note">These are observed customer characteristics, not individual causal factors.</p>
+  </section>
+
+  <!-- ════════════════════════════════════ MODEL PERFORMANCE -->
+  <section class="card" id="section-metrics">
+    <h2 class="section-title">Model Performance</h2>
+    <p class="section-desc">Metrics evaluated on a held-out 20% test set using the trained Logistic Regression model.</p>
+    <div class="metrics-grid" id="metricsGrid">
+      <div class="metric-card skeleton"></div>
+      <div class="metric-card skeleton"></div>
+      <div class="metric-card skeleton"></div>
+      <div class="metric-card skeleton"></div>
+      <div class="metric-card skeleton"></div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════ CHARTS -->
+  <section class="card" id="section-charts">
+    <h2 class="section-title">Data Insights</h2>
+    <p class="section-desc">Visualisations generated from the actual IBM Telco dataset and model evaluation results.</p>
+
+    <div class="charts-grid">
+
+      <div class="chart-box">
+        <h3 class="chart-title">Churn Distribution</h3>
+        <p class="chart-desc">Total customers in the dataset split by churn status.</p>
+        <div class="chart-wrap">
+          <canvas id="churnDistChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <h3 class="chart-title">Churn by Contract Type</h3>
+        <p class="chart-desc">Churn rate observed for each contract category.</p>
+        <div class="chart-wrap">
+          <canvas id="contractChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <h3 class="chart-title">Confusion Matrix</h3>
+        <p class="chart-desc">Model predictions vs actual labels on the test set.</p>
+        <div class="chart-wrap chart-wrap--cm">
+          <canvas id="cmChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <h3 class="chart-title">ROC Curve</h3>
+        <p class="chart-desc">Trade-off between true positive rate and false positive rate.</p>
+        <div class="chart-wrap">
+          <canvas id="rocChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════ HOW IT WORKS -->
+  <section class="card" id="section-how">
+    <h2 class="section-title">How ChurnGuard Works</h2>
+    <p class="section-desc">
+      The model learns patterns from historical customer data and estimates the probability that a customer will churn.
+      It does not claim to know the exact reason a specific customer would leave.
+    </p>
+
+    <div class="pipeline-flow">
+      <div class="pipe-step">
+        <div class="pipe-icon">📂</div>
+        <div class="pipe-label">Customer Data</div>
+        <div class="pipe-sub">18 features</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">🧹</div>
+        <div class="pipe-label">Data Preprocessing</div>
+        <div class="pipe-sub">Clean &amp; validate</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">🔢</div>
+        <div class="pipe-label">Feature Encoding</div>
+        <div class="pipe-sub">OneHot + Scaling</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">🧮</div>
+        <div class="pipe-label">Logistic Regression</div>
+        <div class="pipe-sub">Trained on 7,032 customers</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">📊</div>
+        <div class="pipe-label">Churn Probability</div>
+        <div class="pipe-sub">0 – 100%</div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">🚦</div>
+        <div class="pipe-label">Risk Classification</div>
+        <div class="pipe-sub">LOW / MEDIUM / HIGH</div>
+      </div>
+    </div>
+
+    <div class="how-details">
+      <div class="how-card">
+        <h4>Dataset</h4>
+        <p>IBM Telco Customer Churn dataset — 7,032 customers after cleaning, with demographic, service, and billing features.</p>
+      </div>
+      <div class="how-card">
+        <h4>Preprocessing</h4>
+        <p>Categorical features are one-hot encoded. Numerical features (tenure, monthly charges, total charges) are standardised with <code>StandardScaler</code>.</p>
+      </div>
+      <div class="how-card">
+        <h4>Model</h4>
+        <p>Logistic Regression with <code>class_weight="balanced"</code> to handle class imbalance. Trained with a stratified 80/20 split. <code>random_state=42</code> ensures reproducibility.</p>
+      </div>
+      <div class="how-card">
+        <h4>Prediction</h4>
+        <p>The model outputs a probability via <code>predict_proba()</code>. Risk thresholds: LOW &lt;40%, MEDIUM 40–70%, HIGH ≥70%.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>ChurnGuard &mdash; Customer Churn Prediction &amp; Risk Analysis &mdash; IBM Telco Dataset &mdash; Logistic Regression</p>
+</footer>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
